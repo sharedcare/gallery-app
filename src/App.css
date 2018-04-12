@@ -7,6 +7,18 @@
   height: 80px;
 }
 
+.Nav-boarder {
+  border-width: 2px;
+  background-color: grey;
+  height:72px;
+  width: 100%;
+}
+
+.Nav-button {
+  height:70px;
+  width:100px;
+}
+
 .App-header {
   background-color: #222;
   height: 150px;

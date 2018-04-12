@@ -37,6 +37,7 @@ class ImageUpload extends Component {
         urlData.append('fileExtension', this.state.fileExtension);
         const requestUrl = endpoint + '?' + urlData;
         const file = this.state.file;
+        let filename = this.state.filename;
 
         fetch(requestUrl, {
             method: 'POST',
@@ -70,13 +71,14 @@ class ImageUpload extends Component {
             formData.append('x-amz-meta-tag', '');
             formData.append('file', file);
 
+            filename = resJson.params.params.key;
             return fetch(resJson.params.endpoint_url, {
                 method: 'POST',
                 body: formData
             });
         }).then( function(response) {
             console.log(response);
-            alert('https://gallery-image.s3.amazonaws.com/' + resJson.params.params.key);
+            alert('https://gallery-image.s3.amazonaws.com/' + filename);
         });
 
     }

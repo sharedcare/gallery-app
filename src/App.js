@@ -19,6 +19,7 @@ class ImageUpload extends Component {
         this.state = {
             file: '',
             filename: '',
+            imagePreviewUrl: '',
             imageUrl: '',
             contentType: '',
             fileExtension: ''
@@ -93,7 +94,7 @@ class ImageUpload extends Component {
             this.setState({
                 file: file,
                 filename: file.name,
-                imageUrl: '',
+                imagePreviewUrl: reader.result,
                 contentType: file.type,
                 fileExtension: file.name.split('.').pop()
             });
@@ -105,10 +106,10 @@ class ImageUpload extends Component {
 
 
     render() {
-        let {imageUrl} = this.state;
+        let {imagePreviewUrl} = this.state;
         let $imagePreview = null;
-        if (imageUrl) {
-            $imagePreview = (<img src={imageUrl} />);
+        if (imagePreviewUrl) {
+            $imagePreview = (<img src={imagePreviewUrl} />);
         }
 
         return (

@@ -1,0 +1,30 @@
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+
+<form action="https://gallery-image.s3.amazonaws.com" method="post" enctype="multipart/form-data">
+    Key to upload:
+    <input type="input"  name="key" value="fb65efc0-3e8e-11e8-97e4-b591888a6633.jpg" /><br />
+    <input type="hidden" name="acl" value="public-read" />
+    Content-Type:
+    <input type="input"  name="Content-Type" value="image/jpeg" /><br />
+    <input type="hidden" name="x-amz-server-side-encryption" value="AES256" />
+    <input type="text"   name="X-Amz-Credential" value="AKIAJ772DS3MIOOSGNSA/20180412/us-east-2/s3/aws4_request" />
+    <input type="text"   name="X-Amz-Algorithm" value="AWS4-HMAC-SHA256" />
+    <input type="text"   name="X-Amz-Date" value="20180412T190654Z" />
+
+    Tags for File:
+    <input type="input"  name="x-amz-meta-tag" value="" /><br />
+    <input type="hidden" name="Policy" value='ewoJImV4cGlyYXRpb24iOiAiMjAxOC0wNC0xMlQyMDoyNTo0NS44OTBaIiwKCSJjb25kaXRpb25zIjogWwoJCXsKCQkJImJ1Y2tldCI6ICJnYWxsZXJ5LWltYWdlIgoJCX0sCgkJewoJCQkia2V5IjogImZiNjVlZmMwLTNlOGUtMTFlOC05N2U0LWI1OTE4ODhhNjYzMy5qcGciCgkJfSwKCQl7CgkJCSJhY2wiOiAicHVibGljLXJlYWQiCgkJfSwKCQl7CgkJCSJDb250ZW50LVR5cGUiOiAiaW1hZ2UvanBlZyIKCQl9LAoJCVsKCQkJImNvbnRlbnQtbGVuZ3RoLXJhbmdlIiwKCQkJMCwKCQkJMTUwMDAwMDAKCQldLAoJCXsKCQkJIngtYW16LXNlcnZlci1zaWRlLWVuY3J5cHRpb24iOiAiQUVTMjU2IgoJCX0sCgkJWwoJCQkic3RhcnRzLXdpdGgiLAoJCQkiJHgtYW16LW1ldGEtdGFnIiwKCQkJIiIKCQldLAoJCXsKCQkJIngtYW16LWNyZWRlbnRpYWwiOiAiQUtJQUo3NzJEUzNNSU9PU0dOU0EvMjAxODA0MTIvdXMtZWFzdC0yL3MzL2F3czRfcmVxdWVzdCIKCQl9LAoJCXsKCQkJIngtYW16LWFsZ29yaXRobSI6ICJBV1M0LUhNQUMtU0hBMjU2IgoJCX0sCgkJewoJCQkieC1hbXotZGF0ZSI6ICIyMDE4MDQxMlQxOTA2NTRaIgoJCX0KCV0KfQ==' />
+    <input type="hidden" name="X-Amz-Signature" value="669a289f71a916b75ff8929eb3fe2c0c66b97ede106dda9ae71bebb11a0fc3b0" />
+    File:
+    <input type="file"   name="file" /> <br />
+    <!-- The elements after this will be ignored -->
+    <input type="submit" name="submit" value="Upload to Amazon S3" />
+</form>
+</body>
+</html>

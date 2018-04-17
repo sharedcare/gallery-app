@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 //import logo from './logo.svg';
 import './App.css';
 import ImageUpload from './uploadForm';
-import Example from './Navbar';
 import FacebookLoginButton from './loginButton';
+import MainContainer from './Components/MainContainer'
 
 class App extends Component {
 
@@ -26,7 +26,7 @@ class App extends Component {
 
         return (
             <div className="App">
-                <Example />
+                <MainContainer />
                 <ImageUpload />
                 { !username &&
                 <div>

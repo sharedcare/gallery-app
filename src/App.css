@@ -1,40 +1,33 @@
-.App {
+.HomePage {
+  position: fixed;
+  border: 1px solid black;
   text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.Nav-boarder {
-  border-width: 2px;
-  background-color: grey;
-  height:72px;
+  background: lightgreen;
   width: 100%;
+  height: 100%;
 }
 
-.Nav-button {
-  height:70px;
-  width:100px;
+.MyGalleries{
+  position: fixed;
+  border: 1px solid black;
+  text-align: center;
+  background: lightblue;
+  width: 100%;
+  height: 100%;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.Channels{
+  position: fixed;
+  border: 1px solid black;
+  text-align: center;
+  background: lightpink;
+  width: 100%;
+  height: 100%;
 }
 
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.NavButton{
+  border: 1px solid black;
+  text-align: center;
+  font-size: 15px;
+  padding: 3px;
 }

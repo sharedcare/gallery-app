@@ -19,7 +19,7 @@ class App extends Component {
         } else {
             alert('Facebook login error');
         }
-    }
+    };
 
     render() {
         const { username } = this.state;

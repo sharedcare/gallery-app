@@ -1,5 +1,5 @@
 .HomePage {
-  position: fixed;
+  position: relative;
   border: 1px solid black;
   text-align: center;
   background: lightgreen;

@@ -16,9 +16,9 @@ class NavBar extends Component {
     render () {
         return (
             <div>
-                <button className="NavButton" onClick={() => this.props.handler(<HomePage/>)}>Home Page</button>
-                <button className="NavButton" onClick={() => this.props.handler(<MyGalleries/>)}>My Galleries</button>
-                <button className="NavButton" onClick={() => this.props.handler(<Channels/>)}>Channels</button>
+                <button className="NavButton" onClick={() => this.props.handler("HomePage")}>Home Page</button>
+                <button className="NavButton" onClick={() => this.props.handler("MyGalleries")}>My Galleries</button>
+                <button className="NavButton" onClick={() => this.props.handler("Channels")}>Channels</button>
             </div>
         )
     }

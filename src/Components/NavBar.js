@@ -3,6 +3,7 @@ import '../App.css';
 import HomePage from './HomePage.js'
 import MyGalleries from './MyGalleries.js'
 import Channels from './Channels.js'
+import FacebookLoginButton from './LoginButton'
 
 class NavBar extends Component {
 
@@ -19,6 +20,7 @@ class NavBar extends Component {
                 <button className="NavButton" onClick={() => this.props.handler("HomePage")}>Home Page</button>
                 <button className="NavButton" onClick={() => this.props.handler("MyGalleries")}>My Galleries</button>
                 <button className="NavButton" onClick={() => this.props.handler("Channels")}>Channels</button>
+                <FacebookLoginButton/>
             </div>
         )
     }

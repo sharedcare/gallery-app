@@ -18,31 +18,10 @@ class FacebookLoginButton extends Component {
         this.checkLoginStatus();
     };
 
-    /**
-     * Check login status
-     */
     checkLoginStatus = () => {
         this.FB.getLoginStatus(this.facebookLoginHandler);
     };
 
-    /**
-     * Check login status and call login api is user is not logged in
-     */
-    facebookLogin = () => {
-        if (!this.FB) return;
-
-        this.FB.getLoginStatus(response => {
-            if (response.status === 'connected') {
-                this.facebookLoginHandler(response);
-            } else {
-                this.FB.login(this.facebookLoginHandler, {scope: 'public_profile'});
-            }
-        }, );
-    };
-
-    /**
-     * Handle login response
-     */
     facebookLoginHandler = response => {
         if (response.status === 'connected') {
             this.FB.api('/me', userData => {
@@ -50,19 +29,21 @@ class FacebookLoginButton extends Component {
                     ...response,
                     user: userData
                 };
-                this.props.onLogin(true, result);
+
             });
         } else {
-            this.props.onLogin(false);
+
         }
     };
 
-
     render() {
-        let {children} = this.props;
         return (
-            <div onClick={this.facebookLogin}>
-                {children}
+            <div className="fb-login-button"
+                 data-max-rows="1"
+                 data-size="medium"
+                 data-button-type="login_with"
+                 data-use-continue-as="true"
+                 data-auto-logout-link="true">
             </div>
         );
     }

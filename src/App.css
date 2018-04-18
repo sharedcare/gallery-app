@@ -1,5 +1,5 @@
 .HomePage {
-  position: relative;
+  position: fixed;
   border: 1px solid black;
   text-align: center;
   background: lightgreen;
@@ -30,4 +30,8 @@
   text-align: center;
   font-size: 15px;
   padding: 3px;
+}
+
+.nav-bar>button {
+  margin: 10px;
 }

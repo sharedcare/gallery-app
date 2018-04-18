@@ -29,7 +29,7 @@ class FacebookLoginButton extends Component {
                     ...response,
                     user: userData
                 };
-
+                console.log(result);
             });
         } else {
 

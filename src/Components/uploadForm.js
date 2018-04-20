@@ -19,6 +19,21 @@ class ImageUpload extends Component {
         this._handleSubmit = this._handleSubmit.bind(this);
     }
 
+    componentDidMount() {
+        document.addEventListener('FBObjectReady', this.initializeFacebookLogin);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('FBObjectReady', this.initializeFacebookLogin);
+    }
+
+    /**
+     * Init FB object and check Facebook Login status
+     */
+    initializeFacebookLogin = () => {
+        this.FB = window.FB;
+    };
+
     /**
      * Submit handle function
      * Send 2 post requests to lambda and s3
@@ -31,14 +46,21 @@ class ImageUpload extends Component {
         // Endpoint of rest api to get signature
         const endpoint = 'https://aws.sharedcare.io/gallery-api/upload-image';
 
+        this.initializeFacebookLogin();
+        if (!this.FB) return;
+        let accessToken = this.FB.getAccessToken();
+        console.log(accessToken);
+
         // Construct the url parameters
         const urlData = new URLSearchParams();
         urlData.append('contentType', this.state.contentType);
         urlData.append('fileExtension', this.state.fileExtension);
+        urlData.append('accessToken', accessToken);
         const requestUrl = endpoint + '?' + urlData;
 
         // Make a reference to this
         let self = this;
+
 
         // Post request to get signature
         fetch(requestUrl, {
@@ -91,6 +113,8 @@ class ImageUpload extends Component {
                 imageUrl: 'https://gallery-image.s3.amazonaws.com/' + self.state.filename
             });
             alert(self.state.imageUrl);
+        }).catch( function(err) {
+            console.log(err);
         });
 
     }

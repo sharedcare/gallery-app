@@ -25,7 +25,7 @@ class NavBar extends Component {
     render () {
 
         return (
-            <Menu>
+            <Menu pointing>
                 <Menu.Item
                     name='HomePage'
                     active={this.state.activeComponent === 'HomePage'}
@@ -47,7 +47,11 @@ class NavBar extends Component {
                 >
                     Channels
                 </Menu.Item>
-                <FacebookLoginButton />
+                <Menu.Menu position='right'>
+                    <Menu.Item>
+                        <FacebookLoginButton />
+                    </Menu.Item>
+                </Menu.Menu>
             </Menu>
         )
     }

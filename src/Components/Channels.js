@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Icon, Input } from 'semantic-ui-react';
 import '../App.css';
 
 class Channels extends Component {
@@ -16,9 +17,9 @@ class SearchBar extends Component {
     render(){
         return(
             <form>
-                <input
-                    type = "text"
-                    placeholder = "Search for a channel..."
+                <Input
+                    icon={<Icon name='search' inverted circular link />}
+                    placeholder='Search...'
                 />
             </form>
         )

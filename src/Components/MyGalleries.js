@@ -24,7 +24,7 @@ class MyGalleries extends Component {
 
                 {this.state.imgUrls.map( function(imageUrl) {
                     return (
-                        <Card>
+                        <Card href={imageUrl}>
                             <Image src={imageUrl} />
                             <Card.Content>
                                 <Card.Header>Title</Card.Header>

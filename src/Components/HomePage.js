@@ -1,30 +1,71 @@
 import React, { Component } from 'react';
 import '../App.css';
 import ImageFeed from "./Image";
-import { Header } from 'semantic-ui-react'
+import { Header, Dimmer, Loader } from 'semantic-ui-react'
+
+const loaderStyle = {
+    position: 'fixed'
+};
 
 class HomePage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            imgUrls: ["http://placehold.it/300", "http://placehold.it/300", "http://placehold.it/300", "http://placehold.it/300"]
+            items: [],
+            loading: false
         }
     }
-    
+
+    componentDidMount() {
+        this._getImageTable();
+    }
+
+    _getImageTable() {
+        const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table?tableName=Images';
+
+        this.setState({
+            loading: true
+        });
+        // Make a reference to this
+        let self = this;
+
+        fetch(endpoint).then(function (response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        }).then( function(resJson) {
+            console.log(resJson);
+            self.setState({
+                items: resJson.Items,
+                loading: false
+            })
+        }).catch(function(err) {
+            console.log(err);
+            self.setState({
+                loading: false
+            });
+        });
+    }
+
     render(){
         return (
             <div
                 className = "HomePage">
+                <Dimmer active={this.state.loading} inverted>
+                    <Loader style={loaderStyle} inverted content='Loading' />
+                </Dimmer>
                 <Header as='h2'>HomePage</Header>
 
-                {this.state.imgUrls.map( function(imageUrl) {
+                {this.state.items.reverse().map( function(item) {
                     return (
-                    <ImageFeed imgUrl={imageUrl}/>
+                    <ImageFeed item={item}/>
                     );
                 })}
             </div>
         )
     }
 }
+
 export default HomePage

@@ -6,6 +6,10 @@ import Channels from './Channels.js';
 import FacebookLoginButton from './LoginButton';
 import { Menu } from 'semantic-ui-react';
 
+const menuStyle = {
+    zIndex: '1001'
+};
+
 class NavBar extends Component {
 
     constructor(props){
@@ -25,7 +29,7 @@ class NavBar extends Component {
     render () {
 
         return (
-            <Menu pointing>
+            <Menu style={menuStyle} fixed='top' pointing>
                 <Menu.Item
                     name='HomePage'
                     active={this.state.activeComponent === 'HomePage'}

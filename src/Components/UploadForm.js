@@ -1,19 +1,53 @@
 import React, { Component } from "react";
+import { Modal, Input, Form, Button, Header, Image } from 'semantic-ui-react';
+import placeholder from '../square-image.png';
 import '../App.css';
+
+const buttonStyle = {
+    margin: '50px',
+    bottom: '0',
+    right: '0',
+    position: 'fixed',
+    zIndex: '5'
+};
+
+const textAreaStyle = {
+    marginTop: '20px'
+};
+
+const formStyle = {
+    margin: 'auto',
+    width: '65%'
+};
+
+const submitStyle = {
+    transition: 'all 0.2s ease-out'
+};
 
 /**
  *
  */
 class ImageUpload extends Component {
+
+    state = {
+        open: false,
+        loading: false,
+        success: 0
+    };
+
+    show = dimmer => () => this.setState({ dimmer, open: true });
+    close = () => this.setState({ open: false });
+
     constructor(props) {
         super(props);
         this.state = {
             file: '',
             filename: '',
-            imagePreviewUrl: '',
+            imagePreviewUrl: placeholder,
             imageUrl: '',
             contentType: '',
-            fileExtension: ''
+            fileExtension: '',
+            description: ''
         };
         this._handleImageChange = this._handleImageChange.bind(this);
         this._handleSubmit = this._handleSubmit.bind(this);
@@ -42,7 +76,9 @@ class ImageUpload extends Component {
      */
     _handleSubmit(e) {
         e.preventDefault();
-
+        this.setState({
+            loading: true
+        });
         // Endpoint of rest api to get signature
         const endpoint = 'https://aws.sharedcare.io/gallery-api/upload-image';
 
@@ -112,9 +148,35 @@ class ImageUpload extends Component {
             self.setState({
                 imageUrl: 'https://gallery-image.s3.amazonaws.com/' + self.state.filename
             });
-            alert(self.state.imageUrl);
+
+            const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table';
+            const requestUrl = endpoint + '?accessToken=' + accessToken;
+            const requestBody = {
+                TableName: 'Images',
+                Item: {
+                    ImageId: self.state.filename,
+                    ImageUrl: self.state.imageUrl,
+                    Description: self.state.description
+                }
+            };
+            return fetch(requestUrl, {
+                method: 'POST',
+                body: JSON.stringify(requestBody)
+            });
+        }).then( function(response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            self.setState({
+                loading: false,
+                success: 1
+            });
         }).catch( function(err) {
             console.log(err);
+            self.setState({
+                loading: false,
+                success: -1
+            });
         });
 
     }
@@ -149,19 +211,39 @@ class ImageUpload extends Component {
      * @return {*}
      */
     render() {
-        let {imagePreviewUrl} = this.state;
-        let $imagePreview = null;
-        if (imagePreviewUrl) {
-            $imagePreview = (<img src={imagePreviewUrl} />);
-        }
+        let {imagePreviewUrl, imageUrl} = this.state;
+        let $imagePreview = (<Image src={imagePreviewUrl}
+                                    as='a'
+                                    size='medium'
+                                    href={imageUrl}
+                                    target='_blank'
+                                    centered
+                                    rounded />);
+
+        const { open, dimmer, loading, success } = this.state;
 
         return (
-            <div>
-                <form onSubmit={this._handleSubmit} encType="multipart/form-data" >
-                    <input type="file" accept='image/*' onChange={this._handleImageChange} />
-                    <button type="submit" onClick={this._handleSubmit}>Upload Image</button>
-                </form>
-                {$imagePreview}
+            <div style={buttonStyle}>
+                <Button circular icon='write' color='teal' size='big' onClick={this.show(true)}/>
+                <Modal dimmer={dimmer} open={open} onClose={this.close}>
+                    <Modal.Header>Select a Photo</Modal.Header>
+                    <Modal.Content image>
+                        {$imagePreview}
+                        <Modal.Description style={formStyle}>
+                            <Header>Upload Photo</Header>
+                            <Input type="file" accept='image/*' onChange={this._handleImageChange} />
+                            <Form style={textAreaStyle}>
+                                <Form.TextArea label='Description' placeholder='Describe your picture' onChange={(event, value) => { this.setState({ description: value.value });}}/>
+                            </Form>
+                        </Modal.Description>
+                    </Modal.Content>
+                    <Modal.Actions>
+                        <Button color='black' onClick={this.close}>
+                            Cancel
+                        </Button>
+                        <Button style={submitStyle} positive={success===1} negative={success===-1} icon='arrow up' labelPosition='right' content='Upload' type="submit" onClick={this._handleSubmit} loading={loading}/>
+                    </Modal.Actions>
+                </Modal>
             </div>
         );
     }
@@ -169,3 +251,11 @@ class ImageUpload extends Component {
 }
 
 export default ImageUpload;
+
+/*
+                <Form onSubmit={this._handleSubmit} encType="multipart/form-data">
+                    <Form.Input type="file" accept='image/*' onChange={this._handleImageChange} />
+                    <Form.TextArea id='form-textarea-control-opinion' label='Description' placeholder='Describe your picture' />
+                    <Form.Button id='form-button-control-public' content='Upload' type="submit" onClick={this._handleSubmit} />
+                </Form>
+ */

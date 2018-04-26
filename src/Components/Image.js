@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Segment, Image, Divider, Comment, Form, Button, Header } from 'semantic-ui-react';
+import { Card, Image, Divider, Comment, Form, Button, Header, TextArea, Transition } from 'semantic-ui-react';
 import '../App.css';
 
 const CommentStyle = {
@@ -9,61 +9,202 @@ const CommentStyle = {
     marginBottom: '30px',
 };
 
+const CardStyle = {
+    margin: 'auto',
+    textAlign: 'left',
+    width: '90%',
+    marginBottom: '30px',
+};
+
+const submitStyle = {
+    marginTop: '10px',
+    transition: 'all 0.2s ease-out'
+};
+
+function formatDate(unixDate) {
+    const monthNames = [
+        "January", "February", "March",
+        "April", "May", "June", "July",
+        "August", "September", "October",
+        "November", "December"
+    ];
+
+    const dayNames = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    let actualDate = new Date(unixDate);
+    const day = dayNames[actualDate.getDay()];
+    const date = actualDate.getDate();
+    const year = actualDate.getFullYear();
+    const mouth = monthNames[actualDate.getMonth()];
+    const minute = actualDate.getMinutes() < 10 ? '0'+ actualDate.getMinutes() : actualDate.getMinutes();
+    const hour = actualDate.getHours();
+
+    return mouth + ' ' +  date + ', ' + year + ' at ' + hour + ':' + minute;
+}
+
 class ImageFeed extends Component {
+
+    state = {
+        loading: false,
+        success: 0
+    };
 
     constructor(props) {
         super(props);
         this.state = {
-            imgUrl: props.imgUrl,
-            comments: [{
-                userName: "Joe Henderson",
-                date: "Mon Apr 23 2018 12:00:00",
-                message: "The hours, minutes and seconds stand as visible reminders that your effort put them all there.\n" +
-                "Preserve until your next run, when the watch lets you see how Impermanent your efforts are.",
-                userAvatar: "https://react.semantic-ui.com/assets/images/avatar/small/joe.jpg",
-            },
-            {
-                userName: "Christian Rocha",
-                date: "Mon Apr 23 2018 13:00:00",
-                message: "I re-tweeted this.",
-                userAvatar: "https://react.semantic-ui.com/assets/images/avatar/small/christian.jpg",
-            }]
+            Author: props.item.Author,
+            ImageUrl: props.item.ImageUrl,
+            ImageId: props.item.ImageId,
+            Date: props.item.Date,
+            Description: props.item.Description,
+            Comments: props.item.Comments,
+            reply: ''
+        };
+
+        this._handleClick = this._handleClick.bind(this);
+    }
+
+    componentDidMount() {
+        document.addEventListener('FBObjectReady', this.initializeFacebookLogin);
+
+        this.setState({
+            Date: formatDate(this.props.item.Date)
+        });
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('FBObjectReady', this.initializeFacebookLogin);
+    }
+
+    /**
+     * Init FB object and check Facebook Login status
+     */
+    initializeFacebookLogin = () => {
+        this.FB = window.FB;
+    };
+
+    _handleClick(e) {
+        e.preventDefault();
+
+        this.setState({
+            loading: true
+        });
+
+        this.initializeFacebookLogin();
+        if (!this.FB) {
+            this.setState({
+                loading: false,
+                success: -1
+            });
+            return;
         }
+
+        let accessToken = this.FB.getAccessToken();
+        const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table';
+        const requestUrl = endpoint + '?accessToken=' + accessToken;
+        let Comments = this.state.Comments ? this.state.Comments:[];
+        Comments.push({Messages: this.state.reply});
+        const requestBody = {
+            TableName: 'Images',
+            Item: {
+                Author: this.state.Author,
+                ImageUrl: this.state.ImageUrl,
+                ImageId: this.state.ImageId,
+                Date: this.props.item.Date,
+                Description: this.state.Description,
+                Comments: Comments
+            }
+        };
+
+        // Make a reference to this
+        let self = this;
+
+        fetch(requestUrl, {
+            method: 'POST',
+            body: JSON.stringify(requestBody)
+        }).then( function(response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        }).then( function(resJson) {
+            console.log(resJson);
+            self.setState({
+                Comments: resJson,
+                loading: false,
+                success: 1
+            })
+        }).catch( function(err) {
+            console.log(err);
+            self.setState({
+                loading: false,
+                success: -1
+            });
+        });
     }
 
     render(){
+
+        const { loading, success } = this.state;
+
         return (
             <div className = "image-feed">
 
                 <Divider />
-                <Segment padded className="image">
-
-                    <Image src={this.state.imgUrl} fluid />
-                </Segment>
+                <Card style={CardStyle} href={this.state.ImageUrl} raised>
+                    <Image src={this.state.ImageUrl} fluid />
+                    <Card.Content>
+                        <Card.Header>
+                            {this.state.Author[1]}
+                        </Card.Header>
+                        <Card.Meta>
+                            <span className='date'>
+                                {this.state.Date}
+                            </span>
+                        </Card.Meta>
+                        <Card.Description>
+                            {this.state.Description}
+                        </Card.Description>
+                    </Card.Content>
+                </Card>
                 <Comment.Group style={CommentStyle}>
                     <Header as='h3' dividing>Comments</Header>
-                    {this.state.comments.map( function(comment) {
-                        return (
-                            <Comment>
-                                <Comment.Avatar as='a' src={comment.userAvatar} />
-                                <Comment.Content>
-                                    <Comment.Author>{comment.userName}</Comment.Author>
-                                    <Comment.Metadata>
-                                        <span>{comment.date}</span>
-                                    </Comment.Metadata>
-                                    <Comment.Text>
-                                        {comment.message}
-                                    </Comment.Text>
-                                    <Comment.Actions>
-                                        <Comment.Action>Reply</Comment.Action>
-                                    </Comment.Actions>
-                                </Comment.Content>
-                            </Comment>
-                        );
-                    })}
+                    <Transition.Group
+                        as={Comment}
+                        duration={200}
+                        size='huge'
+                    >
+                        {this.state.Comments && this.state.Comments.map( function(comment) {
+                            return (
+                                <Comment>
+                                    <Comment.Avatar as='a' src={'http://graph.facebook.com/' + comment.User[0] + '/picture'} />
+                                    <Comment.Content>
+                                        <Comment.Author>{comment.User[1]}</Comment.Author>
+                                        <Comment.Metadata>
+                                            <span>{formatDate(comment.Date)}</span>
+                                        </Comment.Metadata>
+                                        <Comment.Text>
+                                            {comment.Messages}
+                                        </Comment.Text>
+                                        <Comment.Actions>
+                                            <Comment.Action>Reply</Comment.Action>
+                                        </Comment.Actions>
+                                    </Comment.Content>
+                                </Comment>
+                            );
+                        })}
+                    </Transition.Group>
                     <Form reply>
-                        <Form.TextArea />
-                        <Button content='Add Comment' labelPosition='left' icon='edit' primary />
+                        <TextArea onChange={(event, value) => { this.setState({ reply: value.value });}} />
+                        <Button style={submitStyle}
+                                positive={success===1}
+                                negative={success===-1}
+                                loading={loading}
+                                content='Add Comment'
+                                labelPosition='left'
+                                icon='edit'
+                                onClick={this._handleClick}
+                                primary />
                     </Form>
                 </Comment.Group>
             </div>

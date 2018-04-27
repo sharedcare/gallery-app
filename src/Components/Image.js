@@ -182,7 +182,7 @@ class ImageFeed extends Component {
                                                         src={comment.User ? 'https://graph.facebook.com/' + comment.User[0] + '/picture' : ''}/>
                                         <Comment.Content>
                                             <Comment.Author>{comment.User ? comment.User[1] : ''}</Comment.Author>
-                                            <Comment.Metadata>
+                                            <Comment.Metadata style={{marginLeft: 0}}>
                                                 <span>{formatDate(comment.Date)}</span>
                                             </Comment.Metadata>
                                             <Comment.Text>
@@ -198,7 +198,7 @@ class ImageFeed extends Component {
                         })}
                     </Transition.Group>
                     <Form reply>
-                        <TextArea onChange={(event, value) => { this.setState({ reply: value.value });}} />
+                        <TextArea onChange={(event, value) => { this.setState({ reply: value.value });}}/>
                         <Button style={submitStyle}
                                 positive={success===1}
                                 negative={success===-1}

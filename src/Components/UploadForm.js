@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Input, Form, Button, Header, Image as SemanticImage } from 'semantic-ui-react';
+import { Message, Modal, Input, Form, Button, Header, Image as SemanticImage } from 'semantic-ui-react';
 import placeholder from '../square-image.png';
 import '../App.css';
 
@@ -92,7 +92,8 @@ class ImageUpload extends Component {
     state = {
         open: false,
         loading: false,
-        success: 0
+        success: 0,
+        visible: false
     };
 
     show = dimmer => () => this.setState({ dimmer, open: true });
@@ -136,6 +137,19 @@ class ImageUpload extends Component {
      */
     _handleSubmit(e) {
         e.preventDefault();
+        if (!this.state.description || this.state.description === '' || this.state.file === '') {
+            let errMessage = [];
+            if (!this.state.description || this.state.description === '')
+                errMessage.push('You must include description for your image.');
+            if (this.state.file === '')
+                errMessage.push('You must choose a image file to upload.');
+            this.setState({
+                success: -1,
+                visible: true,
+                errMsg: errMessage
+            });
+            return;
+        }
         this.setState({
             loading: true
         });
@@ -273,6 +287,10 @@ class ImageUpload extends Component {
         reader.readAsDataURL(file)
     }
 
+    _handleDismiss = () => {
+        this.setState({ visible: false })
+    };
+
     /**
      * Render function returns upload form
      * @return {*}
@@ -287,7 +305,7 @@ class ImageUpload extends Component {
                                     centered
                                     rounded />);
 
-        const { open, dimmer, loading, success } = this.state;
+        const { open, dimmer, loading, success, visible, errMsg } = this.state;
 
         return (
             <div style={buttonStyle}>
@@ -302,6 +320,12 @@ class ImageUpload extends Component {
                             <Form style={textAreaStyle}>
                                 <Form.TextArea label='Description' placeholder='Describe your picture' onChange={(event, value) => { this.setState({ description: value.value });}}/>
                             </Form>
+                            {visible && <Message
+                                onDismiss={this._handleDismiss}
+                                error
+                                header='There was some errors with your submission'
+                                list={errMsg}
+                            />}
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>

@@ -7,7 +7,7 @@ class MyGalleries extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            imgUrls: ["http://placehold.it/300", "http://placehold.it/300", "http://placehold.it/300", "http://placehold.it/300"]
+            imgUrls: ["https://placehold.it/300", "https://placehold.it/300", "https://placehold.it/300", "https://placehold.it/300"]
         }
     }
 

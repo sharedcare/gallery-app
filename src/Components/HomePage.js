@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import ImageFeed from "./Image";
 import { Header, Dimmer, Loader } from 'semantic-ui-react'
+import ImageUpload from './UploadForm';
 
 const loaderStyle = {
     position: 'fixed'
@@ -17,8 +18,12 @@ class HomePage extends Component {
         }
     }
 
-    componentDidMount() {
+    update(){
         this._getImageTable();
+    }
+
+    componentDidMount() {
+        this.update()
     }
 
     _getImageTable() {
@@ -63,6 +68,7 @@ class HomePage extends Component {
                     <ImageFeed item={item} key={item.ImageId}/>
                     );
                 })}
+                <ImageUpload onUploadDone={()=>{this.update()}} />
             </div>
         )
     }

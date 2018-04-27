@@ -245,6 +245,7 @@ class ImageUpload extends Component {
                 loading: false,
                 success: 1
             });
+            self.props.onUploadDone()
         }).catch( function(err) {
             console.log(err);
             self.setState({

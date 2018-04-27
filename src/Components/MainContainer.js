@@ -39,7 +39,7 @@ class MainContainer extends Component {
         return (
             <div>
                 <NavBar handler={this._onNavBarStateChange} />
-                <ImageUpload />
+
                 {this._getActiveComponent()}
             </div>
             

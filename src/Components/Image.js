@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Image, Divider, Comment, Form, Button, Header, TextArea, Transition } from 'semantic-ui-react';
+import { Card, Image, Divider, Comment, Form, Button, Header, TextArea, Transition, Icon } from 'semantic-ui-react';
 import '../App.css';
 
 const CommentStyle = {
@@ -46,7 +46,8 @@ class ImageFeed extends Component {
 
     state = {
         loading: false,
-        success: 0
+        success: 0,
+        active: false
     };
 
     constructor(props) {
@@ -143,15 +144,17 @@ class ImageFeed extends Component {
         });
     }
 
+    _handleCollapseClick = () => this.setState({ active: !this.state.active })
+
     render(){
 
-        const { loading, success } = this.state;
+        const { loading, success, active } = this.state;
 
         return (
             <div className = "image-feed">
 
                 <Divider />
-                <Card style={CardStyle} href={this.state.ImageUrl} raised>
+                <Card style={CardStyle} raised>
                     <Image src={this.state.ImageUrl} fluid />
                     <Card.Content>
                         <Card.Header>
@@ -166,8 +169,14 @@ class ImageFeed extends Component {
                             {this.state.Description}
                         </Card.Description>
                     </Card.Content>
+                    <Card.Content extra>
+                        <Button icon labelPosition='right' toggle floated='right' active={active} onClick={this._handleCollapseClick}>
+                            {active ? 'Collapse' : 'Show' }
+                            <Icon name={active ? 'commenting' : 'commenting outline'} />
+                        </Button>
+                    </Card.Content>
                 </Card>
-                <Comment.Group style={CommentStyle}>
+                <Comment.Group style={CommentStyle} minimal collapsed={!active}>
                     <Header as='h3' dividing>Comments</Header>
                     <Transition.Group
                         as={Comment}
@@ -189,7 +198,7 @@ class ImageFeed extends Component {
                                                 {comment.Messages}
                                             </Comment.Text>
                                             <Comment.Actions>
-                                                <Comment.Action>Reply</Comment.Action>
+                                                <Comment.Action><Icon name='delete' /></Comment.Action>
                                             </Comment.Actions>
                                         </Comment.Content>
                                     </Comment>

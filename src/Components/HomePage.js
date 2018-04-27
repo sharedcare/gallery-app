@@ -60,7 +60,7 @@ class HomePage extends Component {
 
                 {this.state.items.reverse().map( function(item) {
                     return (
-                    <ImageFeed item={item}/>
+                    <ImageFeed item={item} key={item.ImageId}/>
                     );
                 })}
             </div>

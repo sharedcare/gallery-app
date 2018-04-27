@@ -175,23 +175,26 @@ class ImageFeed extends Component {
                         size='huge'
                     >
                         {this.state.Comments && this.state.Comments.map( function(comment) {
-                            return (
-                                <Comment>
-                                    <Comment.Avatar as='a' src={'http://graph.facebook.com/' + comment.User[0] + '/picture'} />
-                                    <Comment.Content>
-                                        <Comment.Author>{comment.User[1]}</Comment.Author>
-                                        <Comment.Metadata>
-                                            <span>{formatDate(comment.Date)}</span>
-                                        </Comment.Metadata>
-                                        <Comment.Text>
-                                            {comment.Messages}
-                                        </Comment.Text>
-                                        <Comment.Actions>
-                                            <Comment.Action>Reply</Comment.Action>
-                                        </Comment.Actions>
-                                    </Comment.Content>
-                                </Comment>
-                            );
+                            if (comment.User) {
+                                return (
+                                    <Comment key={comment.Date}>
+                                        <Comment.Avatar as='a'
+                                                        src={comment.User ? 'http://graph.facebook.com/' + comment.User[0] + '/picture' : ''}/>
+                                        <Comment.Content>
+                                            <Comment.Author>{comment.User ? comment.User[1] : ''}</Comment.Author>
+                                            <Comment.Metadata>
+                                                <span>{formatDate(comment.Date)}</span>
+                                            </Comment.Metadata>
+                                            <Comment.Text>
+                                                {comment.Messages}
+                                            </Comment.Text>
+                                            <Comment.Actions>
+                                                <Comment.Action>Reply</Comment.Action>
+                                            </Comment.Actions>
+                                        </Comment.Content>
+                                    </Comment>
+                                );
+                            }
                         })}
                     </Transition.Group>
                     <Form reply>

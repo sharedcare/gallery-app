@@ -179,7 +179,7 @@ class ImageFeed extends Component {
                                 return (
                                     <Comment key={comment.Date}>
                                         <Comment.Avatar as='a'
-                                                        src={comment.User ? 'http://graph.facebook.com/' + comment.User[0] + '/picture' : ''}/>
+                                                        src={comment.User ? 'https://graph.facebook.com/' + comment.User[0] + '/picture' : ''}/>
                                         <Comment.Content>
                                             <Comment.Author>{comment.User ? comment.User[1] : ''}</Comment.Author>
                                             <Comment.Metadata>

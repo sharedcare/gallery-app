@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Input, Form, Button, Header, Image } from 'semantic-ui-react';
+import { Modal, Input, Form, Button, Header, Image as SemanticImage } from 'semantic-ui-react';
 import placeholder from '../square-image.png';
 import '../App.css';
 
@@ -23,6 +23,66 @@ const formStyle = {
 const submitStyle = {
     transition: 'all 0.2s ease-out'
 };
+
+const max_width = 600;
+const max_height = 600;
+
+function resizeMe(img, imgType) {
+
+    let canvas = document.createElement('canvas');
+
+    var width = img.width;
+    var height = img.height;
+
+    // calculate the width and height, constraining the proportions
+    if (width > height) {
+        if (width > max_width) {
+            //height *= max_width / width;
+            height = Math.round(height *= max_width / width);
+            width = max_width;
+        }
+    } else {
+        if (height > max_height) {
+            //width *= max_height / height;
+            width = Math.round(width *= max_height / height);
+            height = max_height;
+        }
+    }
+
+    // resize the canvas and draw the image data into it
+    canvas.width = width;
+    canvas.height = height;
+    let ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, width, height);
+
+    return canvas.toDataURL(imgType, 0.7); // get the data from canvas as 70% JPG (can be also PNG, etc.)
+
+}
+
+function dataURItoBlob(dataURI) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    var byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+    // write the bytes of the string to an ArrayBuffer
+    var ab = new ArrayBuffer(byteString.length);
+
+    // create a view into the buffer
+    var ia = new Uint8Array(ab);
+
+    // set the bytes of the buffer to the correct values
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob, and you're done
+    var blob = new Blob([ab], {type: mimeString});
+    return blob;
+
+}
 
 /**
  *
@@ -193,8 +253,15 @@ class ImageUpload extends Component {
         let file = e.target.files[0];
 
         reader.onload = () => {
+            let image = new Image();
+            image.src = reader.result;
+            image.onload = () => {
+                let resized = resizeMe(image);
+                this.setState({
+                    file: dataURItoBlob(resized)
+                })
+            };
             this.setState({
-                file: file,
                 filename: file.name,
                 imagePreviewUrl: reader.result,
                 contentType: file.type,
@@ -212,7 +279,7 @@ class ImageUpload extends Component {
      */
     render() {
         let {imagePreviewUrl, imageUrl} = this.state;
-        let $imagePreview = (<Image src={imagePreviewUrl}
+        let $imagePreview = (<SemanticImage src={imagePreviewUrl}
                                     as='a'
                                     size='medium'
                                     href={imageUrl}

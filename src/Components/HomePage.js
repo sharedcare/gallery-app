@@ -55,6 +55,8 @@ class HomePage extends Component {
     }
 
     render(){
+
+        const { userId } = this.props;
         return (
             <div
                 className = "HomePage">
@@ -65,7 +67,7 @@ class HomePage extends Component {
 
                 {this.state.items.reverse().map( function(item) {
                     return (
-                    <ImageFeed item={item} key={item.ImageId}/>
+                    <ImageFeed item={item} key={item.ImageId} userId={userId}/>
                     );
                 })}
                 <ImageUpload onUploadDone={()=>{this.update()}} />

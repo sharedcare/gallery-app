@@ -310,7 +310,7 @@ class ImageUpload extends Component {
 
         return (
             <div style={buttonStyle}>
-                <Button circular icon='write' color='teal' size='big' onClick={this.show(true)}/>
+                <Button className='float-button' circular icon='write' color='teal' size='big' onClick={this.show(true)}/>
                 <Modal dimmer={dimmer} open={open} onClose={this.close}>
                     <Modal.Header>Select a Photo</Modal.Header>
                     <Modal.Content image>

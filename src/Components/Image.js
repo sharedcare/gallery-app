@@ -59,7 +59,8 @@ class ImageFeed extends Component {
             Date: props.item.Date,
             Description: props.item.Description,
             Comments: props.item.Comments,
-            reply: ''
+            reply: '',
+            userId: 123
         };
 
         this._handleClick = this._handleClick.bind(this);
@@ -144,7 +145,40 @@ class ImageFeed extends Component {
         });
     }
 
-    _handleCollapseClick = () => this.setState({ active: !this.state.active })
+    _handleCollapseClick = () => this.setState({ active: !this.state.active });
+
+    _handleImageDelete(e) {
+
+
+        if (!this.FB) return;
+        let accessToken = this.FB.getAccessToken();
+        const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table';
+        const requestUrl = endpoint + '?accessToken=' + accessToken;
+
+        const requestBody = {
+            TableName: 'Images',
+            Item: {
+                Author: this.state.Author,
+                ImageUrl: this.state.ImageUrl,
+                ImageId: this.state.ImageId,
+                Date: this.props.item.Date,
+                Description: this.state.Description,
+                Comments: this.state.comments
+            }
+        };
+
+        fetch(requestUrl, {
+            method: 'DELETE',
+            body: JSON.stringify(requestBody)
+        }).then( function(response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+        }).catch( function(err) {
+            console.log(err);
+        });
+
+    }
 
     render(){
 
@@ -170,6 +204,7 @@ class ImageFeed extends Component {
                         </Card.Description>
                     </Card.Content>
                     <Card.Content extra>
+                        {(this.state.Author[0] === this.props.userId) && <Button size='tiny' icon='trash' basic negative circular onClick={this._handleImageDelete} />}
                         <Button icon labelPosition='right' toggle floated='right' active={active} onClick={this._handleCollapseClick}>
                             {active ? 'Collapse' : 'Show' }
                             <Icon name={active ? 'commenting' : 'commenting outline'} />
@@ -223,4 +258,5 @@ class ImageFeed extends Component {
         )
     }
 }
+
 export default ImageFeed

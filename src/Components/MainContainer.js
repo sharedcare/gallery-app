@@ -12,9 +12,14 @@ class MainContainer extends Component {
     constructor(props){
         super(props);
         this.state = {
-            activeComponent: "HomePage"
+            activeComponent: "HomePage",
+            currentUser: null
         };
         this._onNavBarStateChange = this._onNavBarStateChange.bind(this)
+    }
+
+    _setCurrentUser(userId) {
+        this.setState({ currentUser: userId })
     }
 
     _onNavBarStateChange(text){
@@ -24,7 +29,7 @@ class MainContainer extends Component {
     _getActiveComponent(){
         const activeComponent = this.state.activeComponent;
         if (activeComponent === "HomePage"){
-            return <HomePage/>
+            return <HomePage userId={this.state.currentUser}/>
         }
         else if (activeComponent === "MyGalleries"){
             return <MyGalleries/>
@@ -38,7 +43,7 @@ class MainContainer extends Component {
 
         return (
             <div>
-                <NavBar handler={this._onNavBarStateChange} />
+                <NavBar handler={this._onNavBarStateChange} setUser={this._setCurrentUser.bind(this)} />
 
                 {this._getActiveComponent()}
             </div>

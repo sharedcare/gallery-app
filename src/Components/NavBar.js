@@ -7,7 +7,7 @@ import FacebookLoginButton from './LoginButton';
 import { Menu } from 'semantic-ui-react';
 
 const menuStyle = {
-    zIndex: '1001',
+    zIndex: '2000',
     padding: '0 10%'
 };
 
@@ -54,7 +54,7 @@ class NavBar extends Component {
                 </Menu.Item>
                 <Menu.Menu position='right'>
                     <Menu.Item>
-                        <FacebookLoginButton />
+                        <FacebookLoginButton setUser={this.props.setUser} />
                     </Menu.Item>
                 </Menu.Menu>
             </Menu>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Card, Header, Divider, Dimmer, Loader, Button, TransitionablePortal, Segment, Comment, Form, TextArea, Icon } from 'semantic-ui-react';
+import { Image, Card, Header, Divider, Dimmer, Loader, Button, TransitionablePortal, Segment, Comment, Message, Icon } from 'semantic-ui-react';
 import '../App.css';
 
 const CommentStyle = {
@@ -16,6 +16,13 @@ const cardsStyle = {
 
 const loaderStyle = {
     position: 'fixed'
+};
+
+const messageStyle = {
+    margin: 'auto',
+    marginTop: '20px',
+    width: 'fit-content',
+    boxShadow: '0 0 0 1px rgba(34,36,38,.22) inset, 0 2px 4px 0 rgba(34,36,38,.12), 0 2px 10px 0 rgba(34,36,38,.15)'
 };
 
 function formatDate(unixDate) {
@@ -64,15 +71,18 @@ class MyGalleries extends Component {
     };
 
     _getImageTable() {
-        const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table?tableName=Images';
 
+        if (!this.FB) return;
+        let accessToken = this.FB.getAccessToken();
+        const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table?tableName=Images';
+        const requestUrl = endpoint + '&accessToken=' + accessToken;
         this.setState({
             loading: true
         });
         // Make a reference to this
         let self = this;
 
-        fetch(endpoint).then(function (response) {
+        fetch(requestUrl).then(function (response) {
             if (!response.ok) {
                 throw Error(response.statusText);
             }
@@ -121,11 +131,6 @@ class MyGalleries extends Component {
         });
     }
 
-    _handleCollapseClick() {
-        if (this.state.expand) this.handleClose();
-        else this.handleOpen();
-    }
-
     handleOpen = () => this.setState({ expand: true });
 
     handleClose = () => this.setState({ expand: false });
@@ -150,6 +155,15 @@ class MyGalleries extends Component {
                 <Divider style={{ width: '80%', margin: 'auto' }}/>
 
                 <Card.Group itemsPerRow={4} style={cardsStyle}>
+                    {(!this.state.items.length) &&
+                    <Message icon floating negative style={messageStyle}>
+                        <Icon size='big' name='warning' />
+
+                        <Message.Content>
+                            <Message.Header>Please log in first</Message.Header>
+                        </Message.Content>
+                    </Message>}
+
 
                     {this.state.items.map( function(item) {
                         return (

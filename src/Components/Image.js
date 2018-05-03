@@ -206,7 +206,7 @@ class ImageFeed extends Component {
                     <Card.Content extra>
                         {(this.state.Author[0] === this.props.userId) && <Button size='tiny' icon='trash' basic negative circular onClick={this._handleImageDelete} />}
                         <Button icon labelPosition='right' toggle floated='right' active={active} onClick={this._handleCollapseClick}>
-                            {active ? 'Collapse' : 'Show' }
+                            {active ? 'Collapse' : 'Expand' }
                             <Icon name={active ? 'commenting' : 'commenting outline'} />
                         </Button>
                     </Card.Content>

@@ -32,7 +32,7 @@ class MainContainer extends Component {
             return <HomePage userId={this.state.currentUser}/>
         }
         else if (activeComponent === "MyGalleries"){
-            return <MyGalleries/>
+            return <MyGalleries userId={this.state.currentUser}/>
         }
         else if(activeComponent === "Channels"){
             return <Channels/>

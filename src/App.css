@@ -8,9 +8,10 @@
 }
 
 .MyGalleries{
-  position: fixed;
+  position: relative;
+  text-align: center;
+  background: white;
   margin-top: 100px;
-  background: lightblue;
   width: 100%;
   height: 100%;
 }
@@ -30,7 +31,7 @@
 }
 
 .image {
-  width: 80%;
+  width: 100%;
   text-align: left;
   margin: auto;
 }

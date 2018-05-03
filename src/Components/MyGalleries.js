@@ -100,21 +100,26 @@ class MyGalleries extends Component {
         });
     }
 
-    _handleImageDelete() {
+    _handleImageDelete(item) {
 
-        let accessToken = this.props.userAccessToken;
-        const endpoint = 'https://aws.sharsedcare.io/gallery-api/image-table';
+        let accessToken = this.props.userToken;
+        const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table';
         const requestUrl = endpoint + '?accessToken=' + accessToken;
+        this.setState({
+            loading: true
+        });
+        // Make a reference to this
+        let self = this;
 
         const requestBody = {
             TableName: 'Images',
             Item: {
-                Author: this.state.Author,
-                ImageUrl: this.state.ImageUrl,
-                ImageId: this.state.ImageId,
-                Date: this.props.item.Date,
-                Description: this.state.Description,
-                Comments: this.state.comments
+                Author: item.Author,
+                ImageUrl: item.ImageUrl,
+                ImageId: item.ImageId,
+                Date: item.Date,
+                Description: item.Description,
+                Comments: item.comments
             }
         };
 
@@ -125,8 +130,18 @@ class MyGalleries extends Component {
             if (!response.ok) {
                 throw Error(response.statusText);
             }
+            let removed = self.state.items.filter(function(el) {
+                return el.ImageId !== item.ImageId;
+            });
+            self.setState({
+                loading: false,
+                items: removed
+            });
         }).catch( function(err) {
             console.log(err);
+            self.setState({
+                loading: false
+            });
         });
     }
 
@@ -182,7 +197,7 @@ class MyGalleries extends Component {
                                     </Card.Description>
                                 </Card.Content>
                                 <Card.Content extra>
-                                    {(item.Author[0] === userId) && <Button size='tiny' icon='trash' basic negative circular onClick={self._handleImageDelete} />}
+                                    {(item.Author[0] === userId) && <Button size='tiny' icon='trash' basic negative circular onClick={ () => {self._handleImageDelete(item)}} />}
                                     <TransitionablePortal
                                         closeOnTriggerClick
                                         onOpen={self.handleOpen}
@@ -193,7 +208,7 @@ class MyGalleries extends Component {
                                         )}
                                     >
 
-                                        <Segment style={{ margin: 'auto', width: '30%', zIndex: 2000 }}>
+                                        <Segment style={{ margin: 'auto', width: '30%', zIndex: 2000, top: '30%', left: '35%', position: 'fixed' }}>
                                             <Comment.Group style={CommentStyle} minimal>
                                                 <Header as='h2' dividing>Comments</Header>
                                                 {item.Comments && item.Comments.map( function(comment) {

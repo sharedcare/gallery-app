@@ -147,16 +147,16 @@ class ImageFeed extends Component {
 
     _handleCollapseClick = () => this.setState({ active: !this.state.active });
 
-    _handleImageDelete(e) {
-        e.preventDefault();
+    _handleImageDelete() {
 
-        this.initializeFacebookLogin();
-        console.log(this.FB);
-        if (!this.FB) return;
-        let accessToken = this.FB.getAccessToken();
-        console.log(accessToken);
+        let accessToken = this.props.userToken;
         const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table';
         const requestUrl = endpoint + '?accessToken=' + accessToken;
+        this.setState({
+            loading: true
+        });
+        // Make a reference to this
+        let self = this;
 
         const requestBody = {
             TableName: 'Images',
@@ -177,8 +177,15 @@ class ImageFeed extends Component {
             if (!response.ok) {
                 throw Error(response.statusText);
             }
+            self.setState({
+                loading: false
+            });
+            window.location.reload();
         }).catch( function(err) {
             console.log(err);
+            self.setState({
+                loading: false
+            });
         });
 
     }
@@ -207,7 +214,7 @@ class ImageFeed extends Component {
                         </Card.Description>
                     </Card.Content>
                     <Card.Content extra>
-                        {(this.state.Author[0] === this.props.userId) && <Button size='tiny' icon='trash' basic negative circular onClick={this._handleImageDelete} />}
+                        {(this.state.Author[0] === this.props.userId) && <Button size='tiny' icon='trash' basic negative circular onClick={() => {this._handleImageDelete()}} />}
                         <Button icon labelPosition='right' toggle floated='right' active={active} onClick={this._handleCollapseClick}>
                             {active ? 'Collapse' : 'Expand' }
                             <Icon name={active ? 'commenting' : 'commenting outline'} />

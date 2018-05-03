@@ -13,13 +13,14 @@ class MainContainer extends Component {
         super(props);
         this.state = {
             activeComponent: "HomePage",
-            currentUser: null
+            currentUser: null,
+            userAccessToken: null
         };
         this._onNavBarStateChange = this._onNavBarStateChange.bind(this)
     }
 
-    _setCurrentUser(userId) {
-        this.setState({ currentUser: userId })
+    _setCurrentUser(user) {
+        this.setState({ currentUser: user[0], userAccessToken: user[1] })
     }
 
     _onNavBarStateChange(text){
@@ -29,10 +30,10 @@ class MainContainer extends Component {
     _getActiveComponent(){
         const activeComponent = this.state.activeComponent;
         if (activeComponent === "HomePage"){
-            return <HomePage userId={this.state.currentUser}/>
+            return <HomePage userId={this.state.currentUser} userToken={this.state.userAccessToken}/>
         }
         else if (activeComponent === "MyGalleries"){
-            return <MyGalleries userId={this.state.currentUser}/>
+            return <MyGalleries userId={this.state.currentUser} userToken={this.state.userAccessToken}/>
         }
         else if(activeComponent === "Channels"){
             return <Channels/>

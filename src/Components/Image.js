@@ -148,10 +148,13 @@ class ImageFeed extends Component {
     _handleCollapseClick = () => this.setState({ active: !this.state.active });
 
     _handleImageDelete(e) {
+        e.preventDefault();
 
-
+        this.initializeFacebookLogin();
+        console.log(this.FB);
         if (!this.FB) return;
         let accessToken = this.FB.getAccessToken();
+        console.log(accessToken);
         const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table';
         const requestUrl = endpoint + '?accessToken=' + accessToken;
 

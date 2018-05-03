@@ -72,8 +72,7 @@ class MyGalleries extends Component {
 
     _getImageTable() {
 
-        if (!this.FB) return;
-        let accessToken = this.FB.getAccessToken();
+        let accessToken = this.props.userToken;
         const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table?tableName=Images';
         const requestUrl = endpoint + '&accessToken=' + accessToken;
         this.setState({
@@ -102,9 +101,9 @@ class MyGalleries extends Component {
     }
 
     _handleImageDelete() {
-        if (!this.FB) return;
-        let accessToken = this.FB.getAccessToken();
-        const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table';
+
+        let accessToken = this.props.userAccessToken;
+        const endpoint = 'https://aws.sharsedcare.io/gallery-api/image-table';
         const requestUrl = endpoint + '?accessToken=' + accessToken;
 
         const requestBody = {
@@ -155,7 +154,7 @@ class MyGalleries extends Component {
                 <Divider style={{ width: '80%', margin: 'auto' }}/>
 
                 <Card.Group itemsPerRow={4} style={cardsStyle}>
-                    {(!this.state.items.length) &&
+                    {(!this.props.userId) &&
                     <Message icon floating negative style={messageStyle}>
                         <Icon size='big' name='warning' />
 

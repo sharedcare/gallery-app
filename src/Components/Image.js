@@ -144,7 +144,6 @@ class ImageFeed extends Component {
             }
             return response.json();
         }).then( function(resJson) {
-            console.log(resJson);
             self.setState({
                 Comments: resJson,
                 loading: false,

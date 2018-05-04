@@ -170,7 +170,6 @@ class ImageUpload extends Component {
         this.initializeFacebookLogin();
         if (!this.FB) return;
         let accessToken = this.FB.getAccessToken();
-        console.log(accessToken);
 
         // Construct the url parameters
         const urlData = new URLSearchParams();
@@ -197,7 +196,6 @@ class ImageUpload extends Component {
             return response.json();
 
         }).then( function(resJson) {
-            console.log(resJson);
 
             self.setState({
                 filename: resJson.params.params.key
@@ -293,7 +291,6 @@ class ImageUpload extends Component {
                 contentType: file.type,
                 fileExtension: file.name.split('.').pop()
             });
-            console.log(this.state);
         };
 
         reader.readAsDataURL(file)

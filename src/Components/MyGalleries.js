@@ -96,7 +96,6 @@ class MyGalleries extends Component {
             }
             return response.json();
         }).then( function(resJson) {
-            console.log(resJson);
             self.setState({
                 items: resJson.Items,
                 loading: false

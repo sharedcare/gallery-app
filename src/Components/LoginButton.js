@@ -40,7 +40,6 @@ class FacebookLoginButton extends Component {
                     user: userData
                 };
                 this.props.setUser([userData.id, result.authResponse.accessToken]);
-                console.log(result);
             });
         }
     };

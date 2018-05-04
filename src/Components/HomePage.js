@@ -18,6 +18,9 @@ class HomePage extends Component {
         }
     }
 
+    /**
+     * Updates components on current page
+     */
     update(){
         this._getImageTable();
     }
@@ -26,6 +29,10 @@ class HomePage extends Component {
         this.update()
     }
 
+    /**
+     * Get all image items from the database
+     * @private
+     */
     _getImageTable() {
         const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table?tableName=Images';
 

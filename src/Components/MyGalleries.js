@@ -25,6 +25,11 @@ const messageStyle = {
     boxShadow: '0 0 0 1px rgba(34,36,38,.22) inset, 0 2px 4px 0 rgba(34,36,38,.12), 0 2px 10px 0 rgba(34,36,38,.15)'
 };
 
+/**
+ * Formats standard UNIX time to human readable string
+ * @param {number} unixDate
+ * @return {string}
+ */
 function formatDate(unixDate) {
     const monthNames = [
         "January", "February", "March",
@@ -70,6 +75,10 @@ class MyGalleries extends Component {
         this.FB = window.FB;
     };
 
+    /**
+     * Gets all image items of current user
+     * @private
+     */
     _getImageTable() {
 
         let accessToken = this.props.userToken;
@@ -100,6 +109,11 @@ class MyGalleries extends Component {
         });
     }
 
+    /**
+     * handles the image delete event
+     * @param {object} item
+     * @private
+     */
     _handleImageDelete(item) {
 
         let accessToken = this.props.userToken;

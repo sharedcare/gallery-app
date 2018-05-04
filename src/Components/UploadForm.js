@@ -27,6 +27,12 @@ const submitStyle = {
 const max_width = 600;
 const max_height = 600;
 
+/**
+ * Resize the image into a reasonable size
+ * @param {Image} img
+ * @param {string} imgType
+ * @return {string}
+ */
 function resizeMe(img, imgType) {
 
     let canvas = document.createElement('canvas');
@@ -55,10 +61,15 @@ function resizeMe(img, imgType) {
     let ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0, width, height);
 
-    return canvas.toDataURL(imgType, 0.7); // get the data from canvas as 70% JPG (can be also PNG, etc.)
+    return canvas.toDataURL(imgType); // get the data from canvas as 70% JPG (can be also PNG, etc.)
 
 }
 
+/**
+ * Converts base64 data to raw binary data
+ * @param {data} dataURI
+ * @return {Blob}
+ */
 function dataURItoBlob(dataURI) {
     // convert base64 to raw binary data held in a string
     // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
@@ -85,7 +96,7 @@ function dataURItoBlob(dataURI) {
 }
 
 /**
- *
+ * Image upload window
  */
 class ImageUpload extends Component {
 
@@ -343,11 +354,3 @@ class ImageUpload extends Component {
 }
 
 export default ImageUpload;
-
-/*
-                <Form onSubmit={this._handleSubmit} encType="multipart/form-data">
-                    <Form.Input type="file" accept='image/*' onChange={this._handleImageChange} />
-                    <Form.TextArea id='form-textarea-control-opinion' label='Description' placeholder='Describe your picture' />
-                    <Form.Button id='form-button-control-public' content='Upload' type="submit" onClick={this._handleSubmit} />
-                </Form>
- */

@@ -19,10 +19,20 @@ class MainContainer extends Component {
         this._onNavBarStateChange = this._onNavBarStateChange.bind(this)
     }
 
+    /**
+     * Sets current user's id and token
+     * @param {array} user
+     * @private
+     */
     _setCurrentUser(user) {
         this.setState({ currentUser: user[0], userAccessToken: user[1] })
     }
 
+    /**
+     * Changes the current active component when click the navbar
+     * @param {string} text
+     * @private
+     */
     _onNavBarStateChange(text){
         this.setState({ activeComponent: text})
     }

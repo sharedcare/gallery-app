@@ -21,6 +21,11 @@ const submitStyle = {
     transition: 'all 0.2s ease-out'
 };
 
+/**
+ * Formats standard UNIX time to human readable string
+ * @param {number} unixDate
+ * @return {string}
+ */
 function formatDate(unixDate) {
     const monthNames = [
         "January", "February", "March",
@@ -42,6 +47,10 @@ function formatDate(unixDate) {
     return mouth + ' ' +  date + ', ' + year + ' at ' + hour + ':' + minute;
 }
 
+/**
+ * ImageFeed Component
+ * indicates every image item on Homepage
+ */
 class ImageFeed extends Component {
 
     state = {
@@ -85,6 +94,11 @@ class ImageFeed extends Component {
         this.FB = window.FB;
     };
 
+    /**
+     * Handles the add comment event
+     * @param e
+     * @private
+     */
     _handleClick(e) {
         e.preventDefault();
 
@@ -145,8 +159,16 @@ class ImageFeed extends Component {
         });
     }
 
+    /**
+     * Handles the comments collapse event
+     * @private
+     */
     _handleCollapseClick = () => this.setState({ active: !this.state.active });
 
+    /**
+     * Handles the image delete event
+     * @private
+     */
     _handleImageDelete() {
 
         let accessToken = this.props.userToken;

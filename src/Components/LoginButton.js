@@ -1,5 +1,8 @@
 import React, {Component} from "react";
 
+/**
+ * Facebook login and logout button
+ */
 class FacebookLoginButton extends Component {
 
     componentDidMount() {
@@ -18,10 +21,17 @@ class FacebookLoginButton extends Component {
         this.checkLoginStatus();
     };
 
+    /**
+     * Checks the login status and callbacks to facebookLoginHandler
+     */
     checkLoginStatus = () => {
         this.FB.getLoginStatus(this.facebookLoginHandler);
     };
 
+    /**
+     * Handles the facebook login callbacks
+     * @param response
+     */
     facebookLoginHandler = response => {
         if (response.status === 'connected') {
             this.FB.api('/me', userData => {

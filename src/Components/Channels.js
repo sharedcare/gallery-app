@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Icon, Input } from 'semantic-ui-react';
+import { Icon, Input, Header, Divider } from 'semantic-ui-react';
 import '../App.css';
 
 class Channels extends Component {
     render(){
         return (
             <div
-                className = "Channels"> Channels
+                className = "Channels">
+                <Header as='h2'>Channels</Header>
+                <Divider style={{ width: '60%', margin: 'auto', marginBottom: '20px' }}/>
                 <SearchBar />
             </div>
         )

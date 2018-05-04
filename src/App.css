@@ -13,14 +13,14 @@
   background: white;
   margin-top: 100px;
   width: 100%;
-  height: 100%;
+  height: 80%;
 }
 
 .Channels{
   position: fixed;
-  margin-top: 100px;
   text-align: center;
-  background: lightpink;
+  background: white;
+  margin-top: 100px;
   width: 100%;
   height: 100%;
 }

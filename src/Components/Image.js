@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Image, Divider, Comment, Form, Button, Header, TextArea, Transition, Icon } from 'semantic-ui-react';
+import { Card, Image, Divider, Comment, Form, Button, Header, TextArea, Transition, Icon, Message } from 'semantic-ui-react';
 import '../App.css';
 
 const CommentStyle = {
@@ -56,7 +56,8 @@ class ImageFeed extends Component {
     state = {
         loading: false,
         success: 0,
-        active: false
+        active: false,
+        visible: false
     };
 
     constructor(props) {
@@ -69,7 +70,7 @@ class ImageFeed extends Component {
             Description: props.item.Description,
             Comments: props.item.Comments,
             reply: '',
-            userId: 123
+            userId: null
         };
 
         this._handleClick = this._handleClick.bind(this);
@@ -102,6 +103,19 @@ class ImageFeed extends Component {
     _handleClick(e) {
         e.preventDefault();
 
+        if (!this.state.reply || !this.state.userId ) {
+            let errMessage = [];
+            if (!this.state.userId)
+                errMessage.push('You must log in to reply.');
+            if (!this.state.reply)
+                errMessage.push('The comment content cannot be empty.');
+            this.setState({
+                success: -1,
+                visible: true,
+                errMsg: errMessage
+            });
+            return;
+        }
         this.setState({
             loading: true
         });
@@ -211,9 +225,13 @@ class ImageFeed extends Component {
 
     }
 
+    _handleDismiss = () => {
+        this.setState({ visible: false })
+    };
+
     render(){
 
-        const { loading, success, active } = this.state;
+        const { loading, success, active, visible, errMsg } = this.state;
 
         return (
             <div className = "image-feed">
@@ -272,8 +290,15 @@ class ImageFeed extends Component {
                             }
                         })}
                     </Transition.Group>
+                    {visible && <Message
+                        onDismiss={this._handleDismiss}
+                        error
+                        header='There was some errors with your reply'
+                        list={errMsg}
+                    />}
                     <Form reply>
                         <TextArea onChange={(event, value) => { this.setState({ reply: value.value });}}/>
+
                         <Button style={submitStyle}
                                 positive={success===1}
                                 negative={success===-1}
@@ -283,7 +308,9 @@ class ImageFeed extends Component {
                                 icon='edit'
                                 onClick={this._handleClick}
                                 primary />
+
                     </Form>
+
                 </Comment.Group>
             </div>
         )

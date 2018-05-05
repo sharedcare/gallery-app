@@ -69,8 +69,7 @@ class ImageFeed extends Component {
             Date: props.item.Date,
             Description: props.item.Description,
             Comments: props.item.Comments,
-            reply: '',
-            userId: null
+            reply: ''
         };
 
         this._handleClick = this._handleClick.bind(this);
@@ -103,9 +102,9 @@ class ImageFeed extends Component {
     _handleClick(e) {
         e.preventDefault();
 
-        if (!this.state.reply || !this.state.userId ) {
+        if (!this.state.reply || !this.props.userId ) {
             let errMessage = [];
-            if (!this.state.userId)
+            if (!this.props.userId)
                 errMessage.push('You must log in to reply.');
             if (!this.state.reply)
                 errMessage.push('The comment content cannot be empty.');

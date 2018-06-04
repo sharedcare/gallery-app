@@ -4,7 +4,6 @@ import NavBar from './NavBar.js';
 import HomePage from './HomePage.js';
 import MyGalleries from './MyGalleries.js';
 import Channels from './Channels.js';
-import ImageUpload from './UploadForm';
 
 
 class MainContainer extends Component {

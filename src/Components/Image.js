@@ -171,6 +171,40 @@ class ImageFeed extends Component {
         });
     }
 
+    _handleDeleteComment(comment, e) {
+        e.preventDefault();
+        console.log('delete');
+        let accessToken = this.props.userToken;
+        const endpoint = 'https://aws.sharedcare.io/gallery-api/image-table';
+        const requestUrl = endpoint + '?accessToken=' + accessToken;
+
+        // Make a reference to this
+        let self = this;
+
+        const requestBody = {
+            TableName: 'Images',
+            Item: {
+                Comment: comment
+            }
+        };
+
+        fetch(requestUrl, {
+            method: 'POST',
+            body: JSON.stringify(requestBody)
+        }).then( function(response) {
+            if (!response.ok) {
+                throw Error
+            }
+            return response.json();
+        }).then( function(resJson) {
+            self.setState({
+                Comments: resJson
+            });
+        }).catch( function(err) {
+            console.log(err);
+        })
+    };
+
     /**
      * Handles the comments collapse event
      * @private
@@ -231,6 +265,7 @@ class ImageFeed extends Component {
     render(){
 
         const { loading, success, active, visible, errMsg } = this.state;
+        let self = this;
 
         return (
             <div className = "image-feed">
@@ -281,7 +316,7 @@ class ImageFeed extends Component {
                                                 {comment.Messages}
                                             </Comment.Text>
                                             <Comment.Actions>
-                                                <Comment.Action><Icon name='delete' /></Comment.Action>
+                                              {(comment.User[0] === self.props.userId) && <Comment.Action><Icon name='delete' onClick={(e) => self._handleDeleteComment(comment, e)}/></Comment.Action>}
                                             </Comment.Actions>
                                         </Comment.Content>
                                     </Comment>
